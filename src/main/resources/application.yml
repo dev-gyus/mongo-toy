@@ -4,7 +4,7 @@ server:
 spring:
   data:
     mongodb:
-      uri: mongodb+srv://m220student:vmffkd495@cluster0.smzmj.mongodb.net/sample_mflix?retryWrites=true&w=majority
+      uri: mongodb+srv://m220student:vmffkd495@cluster0.smzmj.mongodb.net/transaction?retryWrites=true&w=majority
 
 logging:
   level:

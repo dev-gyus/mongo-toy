@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Getter @Setter
 @Document(collection = "comments")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CommentDao {
+public class CommentDao extends Auditing{
     @Id
     private ObjectId id;
     private String name;

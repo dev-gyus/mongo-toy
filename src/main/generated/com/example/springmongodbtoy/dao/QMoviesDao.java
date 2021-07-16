@@ -18,11 +18,9 @@ public class QMoviesDao extends EntityPathBase<MoviesDao> {
 
     private static final long serialVersionUID = -115529681L;
 
-    private static final PathInits INITS = PathInits.DIRECT2;
-
     public static final QMoviesDao moviesDao = new QMoviesDao("moviesDao");
 
-    public final QAwards awards;
+    public final SimplePath<Awards> awards = createSimple("awards", Awards.class);
 
     public final ListPath<String, StringPath> cast = this.<String, StringPath>createList("cast", String.class, StringPath.class, PathInits.DIRECT2);
 
@@ -34,7 +32,7 @@ public class QMoviesDao extends EntityPathBase<MoviesDao> {
 
     public final ListPath<String, StringPath> genres = this.<String, StringPath>createList("genres", String.class, StringPath.class, PathInits.DIRECT2);
 
-    public final org.bson.types.QObjectId id;
+    public final ComparablePath<org.bson.types.ObjectId> id = createComparable("id", org.bson.types.ObjectId.class);
 
     public final StringPath lastupdated = createString("lastupdated");
 
@@ -55,25 +53,15 @@ public class QMoviesDao extends EntityPathBase<MoviesDao> {
     public final NumberPath<Long> year = createNumber("year", Long.class);
 
     public QMoviesDao(String variable) {
-        this(MoviesDao.class, forVariable(variable), INITS);
+        super(MoviesDao.class, forVariable(variable));
     }
 
     public QMoviesDao(Path<? extends MoviesDao> path) {
-        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
+        super(path.getType(), path.getMetadata());
     }
 
     public QMoviesDao(PathMetadata metadata) {
-        this(metadata, PathInits.getFor(metadata, INITS));
-    }
-
-    public QMoviesDao(PathMetadata metadata, PathInits inits) {
-        this(MoviesDao.class, metadata, inits);
-    }
-
-    public QMoviesDao(Class<? extends MoviesDao> type, PathMetadata metadata, PathInits inits) {
-        super(type, metadata, inits);
-        this.awards = inits.isInitialized("awards") ? new QAwards(forProperty("awards")) : null;
-        this.id = inits.isInitialized("id") ? new org.bson.types.QObjectId(forProperty("id")) : null;
+        super(MoviesDao.class, metadata);
     }
 
 }
