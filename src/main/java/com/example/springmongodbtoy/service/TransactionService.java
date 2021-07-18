@@ -30,7 +30,7 @@ public class TransactionService {
         throw new RuntimeException("예외발생!!");
     }
 
-    // readOnly 제대로 작동 안됨..
+    // readOnly 제대로 작동 안됨...
     @Transactional(readOnly = true)
     public CommentDto save(CommentDto map) {
         CommentDto save = transactionWriteRepository.save(map);
