@@ -56,20 +56,6 @@ public class CommentRepositorySupport {
 
         LocalDateTime endTime = LocalDateTime.now();
         log.info("End Logic, end time at {}, during time {}", endTime, Duration.between(startTime, endTime).getSeconds());
-        /*
-        name index, 296건 조회, date desc 정렬
-        2s <- 1회차
-        0.8s
-        0.8s
-        0.8s
-        0.8s
-        0.8s
-        0.8s
-        0.8s
-        0.8s
-        0.8s
-        0.8s
-         */
         return dtoList;
     }
 
