@@ -14,4 +14,5 @@ import java.util.List;
 @AllArgsConstructor
 public class TransactionResponse {
     private Comment comment;
+    private List<Comment> commentList;
 }
