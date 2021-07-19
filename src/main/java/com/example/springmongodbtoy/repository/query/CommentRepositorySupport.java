@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.querydsl.binding.QuerydslBindingsFactory;
@@ -42,21 +43,23 @@ public class CommentRepositorySupport {
         log.info("Start Logic, start time at {}", startTime);
         List<CommentDto> dtoList = new ArrayList<>();
 
-        Iterable<CommentDao> comments = commentCrudRepository.findAll(
-                QCommentDao.commentDao.name.eq(name),
-                Sort.by("date").descending()
-        );
+        Criteria nameCriteria = new Criteria("");
+//
+//        List<CommentDto> comments = mongoTemplate.aggregate(Aggregation.newAggregation(Aggregation.match(nameCriteria)), CommentDao.class, CommentDto.class).getMappedResults();
 
-        comments.forEach(comment -> {
-            CommentDto dto = modelMapper.map(comment, CommentDto.class);
-            dto.setId(comment.getId().toString());
-            dto.setMovie_id(comment.getMovie_id().toString());
-            dtoList.add(dto);
-        });
+        Query query = new Query(nameCriteria);
+        List<CommentDao> commentDaos = mongoTemplate.find(query, CommentDao.class);
+        LocalDateTime queryEndTime = LocalDateTime.now();
+        log.info("completed send query, now time is {}, during time {}", queryEndTime, Duration.between(startTime, queryEndTime).getSeconds());
+
+
+        List<CommentDto> comments = commentDaos.stream().map(dao -> modelMapper.map(dao, CommentDto.class)).collect(Collectors.toList());
+
+
 
         LocalDateTime endTime = LocalDateTime.now();
         log.info("End Logic, end time at {}, during time {}", endTime, Duration.between(startTime, endTime).getSeconds());
-        return dtoList;
+        return comments;
     }
 
     public List<CommentDto> findAllCommentsByQueryDsl(String title){

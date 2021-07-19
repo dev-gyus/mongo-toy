@@ -11,7 +11,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 
-@QueryEntity
 @Getter @Setter
 @Document(collection = "comments")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
