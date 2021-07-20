@@ -1,25 +1,13 @@
 package com.example.springmongodbtoy.config;
 
-import com.example.springmongodbtoy.dao.BeforeSaveListener;
-import com.mongodb.ConnectionString;
-import com.mongodb.MongoClientSettings;
-import com.mongodb.TransactionOptions;
-import com.mongodb.WriteConcern;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.springmongodbtoy.dao.CommentEventListener;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.data.mongodb.MongoTransactionManager;
-import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
-import org.springframework.data.mongodb.core.MongoDatabaseFactorySupport;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
-import org.springframework.transaction.support.AbstractPlatformTransactionManager;
 
 @Configuration
 public class MongoConfig{
@@ -43,8 +31,8 @@ public class MongoConfig{
 //    }
 
     @Bean
-    public BeforeSaveListener beforeSaveListener(){
-        return new BeforeSaveListener();
+    public CommentEventListener beforeSaveListener(){
+        return new CommentEventListener();
     }
 
     @Bean

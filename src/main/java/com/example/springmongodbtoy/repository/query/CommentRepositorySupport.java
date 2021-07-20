@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.querydsl.binding.QuerydslBindingsFactory;
@@ -44,16 +45,22 @@ public class CommentRepositorySupport {
         List<CommentDto> dtoList = new ArrayList<>();
 
         Criteria nameCriteria = new Criteria("");
-//
-//        List<CommentDto> comments = mongoTemplate.aggregate(Aggregation.newAggregation(Aggregation.match(nameCriteria)), CommentDao.class, CommentDto.class).getMappedResults();
 
-        Query query = new Query(nameCriteria);
-        List<CommentDao> commentDaos = mongoTemplate.find(query, CommentDao.class);
+        AggregationResults<CommentDto> aggregate = mongoTemplate.aggregate(Aggregation.newAggregation(
+                Aggregation.match(nameCriteria),
+                Aggregation.project("id", "name", "email"),
+                Aggregation.limit(10L)
+        ), CommentDao.class, CommentDto.class);
+        List<CommentDto> comments = aggregate.getMappedResults();
+        log.info("Convert aggregation result to json = {}", aggregate.getRawResults().toJson());
+
+//        Query query = new Query(nameCriteria);
+//        List<CommentDao> commentDaos = mongoTemplate.find(query, CommentDao.class);
         LocalDateTime queryEndTime = LocalDateTime.now();
         log.info("completed send query, now time is {}, during time {}", queryEndTime, Duration.between(startTime, queryEndTime).getSeconds());
 
 
-        List<CommentDto> comments = commentDaos.stream().map(dao -> modelMapper.map(dao, CommentDto.class)).collect(Collectors.toList());
+//        List<CommentDto> comments = commentDaos.stream().map(dao -> modelMapper.map(dao, CommentDto.class)).collect(Collectors.toList());
 
 
 
@@ -79,7 +86,6 @@ public class CommentRepositorySupport {
         comments.forEach(dao -> {
             CommentDto dto = modelMapper.map(dao, CommentDto.class);
             dto.setId(dao.getId().toString());
-            dto.setMovie_id(dao.getMovie_id().toString());
             dtoList.add(dto);
         });
 
@@ -106,7 +112,6 @@ public class CommentRepositorySupport {
         List<CommentDto> dtoList = commentDaos.stream().map(dao -> {
             CommentDto dto = modelMapper.map(dao, CommentDto.class);
             dto.setId(dao.getId().toString());
-            dto.setMovie_id(dao.getMovie_id().toString());
             return dto;
         }).collect(Collectors.toList());
 

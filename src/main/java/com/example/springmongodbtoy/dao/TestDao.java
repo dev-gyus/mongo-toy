@@ -8,6 +8,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Id;
+import java.util.List;
 
 @Getter @Setter
 @Document("test_collection")
@@ -17,4 +18,5 @@ public class TestDao {
     @Id
     private ObjectId id;
     private String name;
+    private List<String> testList;
 }

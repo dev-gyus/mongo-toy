@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -22,8 +23,7 @@ public class PageableService {
 
 
     public List<CommentDto> findCommentList(Pageable pageable) {
-        Slice<CommentDao> daoSlice = commentCrudRepository.findAllBy(pageable);
-        Slice<CommentDto> dtoSlice = daoSlice.map(dao -> modelMapper.map(dao, CommentDto.class));
-        return dtoSlice.getContent();
+        List<CommentDto> daoSlice = commentCrudRepository.findAllBy(pageable);
+        return daoSlice.stream().map(dao -> modelMapper.map(dao, CommentDto.class)).collect(Collectors.toList());
     }
 }
